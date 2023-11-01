@@ -59,7 +59,7 @@ export default function Modal({ onClose }) {
                     <DatePicker
                       value={date}
                       onValueChange={setDate}
-                      className="rounded-lg ring-0 outline-none"
+                      className="rounded-lg ring-0 outline-none w-1/2"
                     />
                     <TimePicker />
                   </div>

@@ -38,7 +38,7 @@ function TimePicker() {
   const closeModal = () => setIsOpen(false);
   const stopPropagation = (e) => e.stopPropagation();
   return (
-    <div>
+    <div className="w-1/2">
       <button
         className="bg-zinc-900 border border-zinc-800 h-[38px] px-8 w-full text-zinc-300 rounded-lg whitespace-nowrap"
         onClick={() => setIsOpen(true)}
@@ -48,7 +48,7 @@ function TimePicker() {
       {isOpen && (
         <div
           onClick={closeModal}
-          className="fixed top-[4.6rem] left-20 lg:left-32 w-full h-full flex items-center justify-center"
+          className="fixed top-[7.4rem] lg:top-[7.5rem] left-14 lg:left-32 w-full h-full flex items-center justify-center"
         >
           <div
             onClick={stopPropagation}
@@ -59,10 +59,10 @@ function TimePicker() {
                 ? `${hour}:${minute.toString().padStart(2, "0")} ${ampm}`
                 : "Time"}
             </div>
-            <div className="flex justify-between space-x-4 font-mono text-xs">
+            <div className="flex justify-between space-x-4">
               <div>
-                <label className="text-blue-400">Hour</label>
-                <div className="h-[7rem] overflow-auto flex flex-col items-center">
+                <label className="text-blue-400 tracking-wider">Hour</label>
+                <div className="h-48 overflow-auto flex flex-col items-center">
                   {Array.from({ length: 12 }, (_, i) => i + 1).map((h) => (
                     <button
                       ref={(el) => (hourRefs.current[h - 1] = el)}
@@ -80,8 +80,8 @@ function TimePicker() {
                 </div>
               </div>
               <div>
-                <label className="text-blue-400">Minute</label>
-                <div className="h-[7rem] overflow-auto flex flex-col items-center">
+                <label className="text-blue-400 tracking-widest">Minute</label>
+                <div className="h-48 overflow-auto flex flex-col items-center">
                   {Array.from({ length: 60 }, (_, i) => i).map((m) => (
                     <button
                       ref={(el) => (minuteRefs.current[m] = el)}
@@ -99,7 +99,7 @@ function TimePicker() {
                 </div>
               </div>
               <div>
-                <label className="text-blue-400">AM/PM</label>
+                <label className="text-blue-400 tracking-wider">AM/PM</label>
                 <div className="flex flex-col items-center">
                   {["AM", "PM"].map((a, i) => (
                     <button
