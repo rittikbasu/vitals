@@ -85,6 +85,14 @@ export default function Home({ vitals }) {
     </div>
   );
 }
+const convertTo24Hour = (time) => {
+  const [main, period] = time.split(" ");
+  let [hours, minutes] = main.split(":");
+  if (period === "PM") {
+    hours = hours === "12" ? "00" : Number(hours) + 12;
+  }
+  return `${hours}:${minutes}`;
+};
 
 export async function getStaticProps() {
   let { data, error } = await supabase.from("vitals").select("*");
@@ -119,7 +127,18 @@ export async function getStaticProps() {
         pulse: pulse || "-",
       };
     })
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
+    .sort((a, b) => {
+      const dateComparison = new Date(b.date) - new Date(a.date);
+      if (dateComparison !== 0) {
+        return dateComparison;
+      } else {
+        const timeA = convertTo24Hour(a.time);
+        const timeB = convertTo24Hour(b.time);
+        return (
+          new Date(`1970-01-01T${timeB}`) - new Date(`1970-01-01T${timeA}`)
+        );
+      }
+    });
 
   return {
     props: {
