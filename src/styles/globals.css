@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+}
+
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+
+.rc-time-picker-input {
+  background-color: #3f3f46 !important;
+  border: none !important;
+  border-radius: 0.5rem !important;
+  outline: none !important;
+  height: 2.375rem !important;
+  font-size: 1rem !important;
+  color: white !important;
+}
+
+/* .rc-time-picker-panel {
+  top: 415px !important;
+  right: 24px !important;
+  left: auto !important;
+} */
+
+.rc-time-picker-panel-inner {
+  background-color: #3f3f46 !important;
+  border: none !important;
+  border-radius: 0.5rem !important;
+  box-shadow: none !important;
+}
+
+.rc-time-picker-panel-input {
+  background-color: #3f3f46 !important;
+  /* text center */
+  text-align: center !important;
+}
+
+.rc-time-picker-panel-select-option-selected {
+  background-color: #3f3f46 !important;
+  /* color blue-500 */
+  color: #3b82f6 !important;
+}
+
+.rc-time-picker-panel-input-wrap {
+  border-bottom: 1px solid #71717a !important;
+}
+
+#headlessui-popover-button-\:rbq\: {
+  background-color: #3f3f46 !important;
+  border: none !important;
+  /* ring none */
+  box-shadow: none !important;
+}
