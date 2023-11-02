@@ -11,28 +11,9 @@ import {
 import Button from "@/components/Button";
 import Modal from "@/components/Modal";
 
-// use env variables
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_API_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
-
 export default function Home({ vitals }) {
-  console.log(vitals);
   const [tableData, setTableData] = useState(vitals);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newEntry, setNewEntry] = useState({
-    date: "",
-    time: "",
-    bp: "",
-    pulse: "",
-  });
-
-  const addEntry = () => {
-    setTableData([...tableData, newEntry]);
-    setNewEntry({ date: "", time: "", bp: "", pulse: "" });
-    setShowModal(false);
-  };
-
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-14">
       <h1 className="text-2xl font-mono text-green-200 text-center py-8">
@@ -81,7 +62,13 @@ export default function Home({ vitals }) {
       <div className="fixed bottom-0 left-0 right-0 p-4 flex justify-center items-center">
         <Button onClick={() => setIsModalOpen(true)}>Add</Button>
       </div>
-      {isModalOpen && <Modal onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && (
+        <Modal
+          onClose={() => setIsModalOpen(false)}
+          tableData={tableData}
+          setTableData={setTableData}
+        />
+      )}
     </div>
   );
 }
@@ -95,6 +82,10 @@ const convertTo24Hour = (time) => {
 };
 
 export async function getStaticProps() {
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_API_KEY;
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
   let { data, error } = await supabase.from("vitals").select("*");
 
   if (error) {
