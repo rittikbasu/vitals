@@ -2,15 +2,47 @@ import { useState, useEffect } from "react";
 import { DatePicker } from "@tremor/react";
 import TimePicker from "./TimePicker";
 
-export default function Modal({ onClose }) {
+export default function Modal({ onClose, tableData, setTableData }) {
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState(null);
   const [bpHigh, setBpHigh] = useState("");
   const [bpLow, setBpLow] = useState("");
   const [pulse, setPulse] = useState("");
 
-  const handleSubmit = () => {
-    // Handle form submission here
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch("/api/writetodb", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ bpHigh, bpLow, date, time, pulse }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add data");
+      }
+
+      const data = await response.json();
+      console.log(data.message);
+
+      const newTableData = {
+        bp: `${bpHigh}/${bpLow}`,
+        date: date.toLocaleDateString("en-US", {
+          day: "numeric",
+          month: "short",
+          year: "2-digit",
+        }),
+        time: time,
+        pulse: pulse || "-",
+      };
+      const updatedTableData = [newTableData, ...tableData];
+      setTableData(updatedTableData);
+    } catch (error) {
+      console.error(error.message);
+    }
     onClose();
   };
 
@@ -48,20 +80,19 @@ export default function Modal({ onClose }) {
           <div className="bg-zinc-900 px-4 sm:p-6 sm:pb-4 rounded-t-lg">
             <div className="sm:flex sm:items-start">
               <div className="text-center">
-                <h1
-                  className="text-xl leading-6 font-medium text-zinc-200"
-                  id="modal-title"
-                >
+                <h1 className="text-xl leading-6 font-medium text-zinc-200">
                   Add New Entry
                 </h1>
-                <div className="space-y-8 py-12">
+                <div className="space-y-8 py-12 text-sm">
                   <div className="flex gap-x-4 justify-between">
                     <DatePicker
                       value={date}
                       onValueChange={setDate}
                       className="rounded-lg ring-0 outline-none w-1/2"
+                      enableClear={false}
+                      maxDate={new Date()}
                     />
-                    <TimePicker />
+                    <TimePicker time={time} setTime={setTime} />
                   </div>
                   <div className="flex gap-x-4 h-[38px] justify-between">
                     <div className="flex rounded-lg bg-zinc-900 border border-zinc-800 items-center">
@@ -97,7 +128,8 @@ export default function Modal({ onClose }) {
             <button
               type="button"
               onClick={handleSubmit}
-              className=" bg-blue-600 rounded-full px-8 py-1 text-zinc-100"
+              className=" bg-blue-600 rounded-full px-8 py-1 text-zinc-100 disabled:bg-blue-400 disabled:cursor-not-allowed"
+              disabled={!date || !time || !bpHigh || !bpLow}
             >
               Submit
             </button>
