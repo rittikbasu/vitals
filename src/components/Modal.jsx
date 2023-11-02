@@ -92,7 +92,7 @@ export default function Modal({ onClose, tableData, setTableData }) {
                       enableClear={false}
                       maxDate={new Date()}
                     />
-                    <TimePicker time={time} setTime={setTime} />
+                    <TimePicker setTime={setTime} />
                   </div>
                   <div className="flex gap-x-4 h-[38px] justify-between">
                     <div className="flex rounded-lg bg-zinc-900 border border-zinc-800 items-center">
