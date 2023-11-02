@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-function TimePicker() {
+function TimePicker({ setTime }) {
   const date = new Date();
   const currentHour = date.getHours();
   const currentMinute = date.getMinutes();
@@ -13,11 +13,13 @@ function TimePicker() {
   const [ampm, setAmpm] = useState(currentAmpm);
   const [isOpen, setIsOpen] = useState(false);
 
-  const clearTime = () => {
-    setHour(currentHour > 12 ? currentHour - 12 : currentHour);
-    setMinute(currentMinute);
-    setAmpm(currentAmpm);
+  const handleClick = (value, setter) => {
+    setter(value);
   };
+
+  useEffect(() => {
+    setTime(`${hour}:${minute.toString().padStart(2, "0")} ${ampm}`);
+  }, [hour, minute, ampm, setTime]);
 
   const hourRefs = useRef([]);
   const minuteRefs = useRef([]);
@@ -48,7 +50,7 @@ function TimePicker() {
       {isOpen && (
         <div
           onClick={closeModal}
-          className="fixed top-[7.4rem] lg:top-[7.5rem] left-14 lg:left-32 w-full h-full flex items-center justify-center"
+          className="fixed top-[7rem] lg:top-[7.5rem] left-16 lg:left-32 w-full h-full flex items-center justify-center"
         >
           <div
             onClick={stopPropagation}
@@ -62,7 +64,7 @@ function TimePicker() {
             <div className="flex justify-between space-x-4">
               <div>
                 <label className="text-blue-400 tracking-wider">Hour</label>
-                <div className="h-48 overflow-auto flex flex-col items-center">
+                <div className="h-44 overflow-auto flex flex-col items-center">
                   {Array.from({ length: 12 }, (_, i) => i + 1).map((h) => (
                     <button
                       ref={(el) => (hourRefs.current[h - 1] = el)}
@@ -70,9 +72,7 @@ function TimePicker() {
                         h === hour ? "text-blue-500" : "text-white"
                       }`}
                       key={h}
-                      onClick={() => {
-                        setHour(h);
-                      }}
+                      onClick={() => handleClick(h, setHour)}
                     >
                       {h}
                     </button>
@@ -81,7 +81,7 @@ function TimePicker() {
               </div>
               <div>
                 <label className="text-blue-400 tracking-widest">Minute</label>
-                <div className="h-48 overflow-auto flex flex-col items-center">
+                <div className="h-44 overflow-auto flex flex-col items-center">
                   {Array.from({ length: 60 }, (_, i) => i).map((m) => (
                     <button
                       ref={(el) => (minuteRefs.current[m] = el)}
@@ -89,9 +89,7 @@ function TimePicker() {
                         m === minute ? "text-blue-500" : "text-white"
                       }`}
                       key={m}
-                      onClick={() => {
-                        setMinute(m);
-                      }}
+                      onClick={() => handleClick(m, setMinute)}
                     >
                       {m.toString().padStart(2, "0")}
                     </button>
@@ -107,9 +105,7 @@ function TimePicker() {
                       className={`block ${
                         a === ampm ? "text-blue-500" : "text-white"
                       }`}
-                      onClick={() => {
-                        setAmpm(a);
-                      }}
+                      onClick={() => handleClick(a, setAmpm)}
                     >
                       {a}
                     </button>
