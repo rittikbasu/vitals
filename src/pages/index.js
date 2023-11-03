@@ -9,6 +9,7 @@ import {
   TableBody,
   TableCell,
 } from "@tremor/react";
+import { AiFillEdit } from "react-icons/ai";
 import Button from "@/components/Button";
 import Modal from "@/components/Modal";
 
@@ -24,7 +25,7 @@ export default function Home({ vitals }) {
         />
         <title>Vitals</title>
       </Head>
-      <div className="max-w-5xl mx-auto px-2 sm:px-6 lg:px-8 pb-14 bg-zinc-900/70">
+      <div className="max-w-5xl mx-auto px-2 sm:px-6 lg:px-8 pb-14 bg-zinc-900/60">
         <h1 className="text-2xl font-mono text-green-200 text-center py-8">
           Vitals
         </h1>
@@ -71,6 +72,13 @@ export default function Home({ vitals }) {
         <div className="fixed bottom-0 left-0 right-0 p-4 flex justify-center items-center">
           <Button onClick={() => setIsModalOpen(true)}>Add</Button>
         </div>
+        {/* <div className="fixed bottom-0 left-0 p-4 flex justify-center items-center">
+          <Button
+            className="rounded-full px-2 py-2"
+            animation={false}
+            icon={<AiFillEdit className="text-2xl text-blue-500" />}
+          ></Button>
+        </div> */}
         {isModalOpen && (
           <Modal
             onClose={() => setIsModalOpen(false)}
@@ -145,5 +153,6 @@ export async function getStaticProps() {
     props: {
       vitals: vitals,
     },
+    revalidate: 1,
   };
 }
